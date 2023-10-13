@@ -1,0 +1,130 @@
+info:
+  description: "A REST API for Calibre utilities."
+  version: "1.0.0"
+  title: "Calibre API"
+paths:
+  /download/{filename}:
+    get:
+      summary: "Download specified file"
+      produces:
+        - "*/*"
+      parameters:
+        - in: path
+          name: filename
+          type: string
+          required: true
+          description: File to download
+      responses:
+        200:
+          description: "OK"
+  /download:
+    post:
+      summary: "Download specified file"
+      produces:
+        - "*/*"
+      parameters:
+        - in: body
+          name: filename
+          type: string
+          required: true
+          description: File to download
+          example: "1168baaa-c75e-436e-934c-1888e92a49d9.txt"
+      responses:
+        200:
+          description: "OK"
+  /upload:
+    post:
+      summary: "Upload file."
+      consumes:
+        - "*/*"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: file
+          required: true
+          schema:
+            type: string
+            example: "Example document"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "object"
+            properties:
+              filename:
+                type: "string"
+                description: "Filename of uploaded file"
+                example: "1168baaa-c75e-436e-934c-1888e92a49d9.txt"
+              filesize:
+                type: "integer"
+                description: "Size of uploaded file in bytes"
+                example: "321"
+  /files:
+    get:
+      summary: "List of available files"
+      produces:
+        - "*/*"
+      responses:
+        200:
+          description: "OK"
+  /ebook-convert/version:
+    get:
+      summary: "Get ebook-convert version"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "object"
+            properties:
+              version:
+                type: "string"
+                description: "Output from ebook-convert --version"
+                example: "ebook-convert (calibre 2.75.1)"
+  /ebook-convert:
+    post:
+      summary: "Call ebook-convert utility"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: request
+          schema:
+            type: "object"
+            properties:
+              filename:
+                type: "string"
+                description: "Source filename for ebook-convert utility"
+                example: "1168baaa-c75e-436e-934c-1888e92a49d9.txt"
+              format:
+                type: "string"
+                description: "Target format (e.g. azw3 or epub)"
+                example: "azw3"
+              params:
+                type: "array"
+                items:
+                  type: string
+                description: "Parameters for ebook-convert utility"
+                example: '["--filter-css", "font-family,color,margin-left,margin-right"]'
+              debug:
+                type: "boolean"
+                description: "Full stdout/stderr of ebook-convert utility will be send in response"
+                example: "true"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "object"
+            properties:
+              filename:
+                type: "string"
+                description: "Filename of conversion output"
+                example: "ff4002db-a078-41a2-acdd-f5c8929c9a29.azw3"
+              debug:
+                type: "string"
+                description: "Full stdout/stderr of ebook-convert utility"
+                example: ""
