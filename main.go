@@ -24,7 +24,7 @@ func main() {
     router := gin.Default()
     router.POST("/upload", UploadFile)
     router.POST("/download", DownloadFile)
-    router.GET("/download/*", DownloadFile)
+    router.GET("/download/:filename", DownloadFile)
     router.POST("/ebook-convert", EbookConvertFile)
     router.GET("/ebook-convert/version", EbookConvertVersion)
     router.GET("/files", ListFiles)
