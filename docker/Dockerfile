@@ -16,6 +16,7 @@ RUN apt-get clean autoclean; \
     rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 RUN useradd -m -s /bin/bash calibre
+RUN echo "Defaults env_keep += PORT" > /etc/sudoers.d/calibre-api && chmod 0600 /etc/sudoers.d/calibre-api
 
 RUN mkdir -p /opt/calibre-api/files
 COPY --from=builder /opt/calibre-api/calibre-api /opt/calibre-api/calibre-api
